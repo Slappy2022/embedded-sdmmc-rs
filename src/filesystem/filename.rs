@@ -3,7 +3,7 @@
 #[cfg_attr(feature = "defmt-log", derive(defmt::Format))]
 #[derive(PartialEq, Eq, Clone)]
 pub struct ShortFileName {
-    pub(crate) contents: [u8; 11],
+    pub contents: [u8; 11],
 }
 
 /// Various filename related errors that can occur.

@@ -69,7 +69,7 @@
 //! Make sure that either the `log` feature or the `defmt-log` feature is enabled.
 
 #![cfg_attr(not(test), no_std)]
-#![deny(missing_docs)]
+//#![deny(missing_docs)]
 
 // ****************************************************************************
 //
@@ -98,6 +98,9 @@ pub use crate::filesystem::{
 };
 pub use crate::sdmmc::Error as SdMmcError;
 pub use crate::sdmmc::{BlockSpi, SdMmcSpi};
+
+mod handle;
+pub use crate::handle::*;
 
 // ****************************************************************************
 //
@@ -158,10 +161,12 @@ where
     BadBlockSize(u16),
     /// Entry not found in the block
     NotInBlock,
+    ControllerInUse,
+    VolumeInUse,
 }
 
 mod controller;
-pub use controller::Controller;
+pub use controller::{Controller, DummyTimeSource};
 
 /// Represents a partition with a filesystem within it.
 #[cfg_attr(feature = "defmt-log", derive(defmt::Format))]

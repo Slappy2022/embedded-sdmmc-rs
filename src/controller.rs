@@ -12,12 +12,20 @@ use crate::filesystem::{
     Attributes, Cluster, DirEntry, Directory, File, Mode, ShortFileName, TimeSource, MAX_FILE_SIZE,
 };
 use crate::{
-    Block, BlockCount, BlockDevice, BlockIdx, Error, Volume, VolumeIdx, VolumeType,
+    Block, BlockCount, BlockDevice, BlockIdx, Error, Timestamp, Volume, VolumeIdx, VolumeType,
     PARTITION_ID_FAT16, PARTITION_ID_FAT16_LBA, PARTITION_ID_FAT32_CHS_LBA, PARTITION_ID_FAT32_LBA,
 };
 
+pub struct DummyTimeSource;
+impl TimeSource for DummyTimeSource {
+    fn get_timestamp(&self) -> Timestamp {
+        Timestamp::from_fat(0, 0)
+    }
+}
+
+
 /// A `Controller` wraps a block device and gives access to the volumes within it.
-pub struct Controller<D, T, const MAX_DIRS: usize = 4, const MAX_FILES: usize = 4>
+pub struct Controller<D, T = DummyTimeSource, const MAX_DIRS: usize = 4, const MAX_FILES: usize = 4>
 where
     D: BlockDevice,
     T: TimeSource,
